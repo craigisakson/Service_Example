@@ -6,32 +6,47 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.widget.Toast;
 
+/**
+ * The Class SampleService.
+ */
 public class SampleService extends Service {
-	private NotificationManager mNM;
-	public Context ctx = this;
-	public LocationManager fullLocManager;
-	public LocationListener fullLocListener;
 
-	// Unique Identification Number for the Notification.
-	// We use it on Notification start, and to cancel it.
+	/** The m nm. */
+	private NotificationManager mNM;
+
+	/** The ctx. */
+	public Context ctx = this;
+
+	/**
+	 * The NOTIFICATION. Unique Identification Number for the Notification. We
+	 * use it on Notification start, and to cancel it.
+	 * */
 	private int NOTIFICATION = 1;
 
 	/**
 	 * Class for clients to access. Because we know this service always runs in
-	 * the same process as its clients, we don't need to deal with IPC.
+	 * the same process as its clients, we don't need to deal with Inter-Process
+	 * Communication.
 	 */
 	public class LocalBinder extends Binder {
+
+		/**
+		 * Gets the service.
+		 * 
+		 * @return the service
+		 */
 		SampleService getService() {
 			return SampleService.this;
 		}
 	}
 
+	/**
+	 * Creates the service
+	 */
 	@Override
 	public void onCreate() {
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -41,6 +56,10 @@ public class SampleService extends Service {
 		showNotification();
 	}
 
+	/**
+	 * onStartCommand is called when service is first created. This is where we
+	 * put the code that does the work for the service
+	 */
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// We want this service to continue running until it is explicitly
@@ -51,6 +70,9 @@ public class SampleService extends Service {
 		return START_STICKY;
 	}
 
+	/**
+	 * Ran when when the service is destroyed
+	 */
 	@Override
 	public void onDestroy() {
 		// Cancel the persistent notification.
@@ -61,6 +83,9 @@ public class SampleService extends Service {
 				.show();
 	}
 
+	/**
+	 * Return the local binder
+	 */
 	@Override
 	public IBinder onBind(Intent intent) {
 		return mBinder;
@@ -68,6 +93,7 @@ public class SampleService extends Service {
 
 	// This is the object that receives interactions from clients. See
 	// RemoteService for a more complete example.
+	/** The m binder. */
 	private final IBinder mBinder = new LocalBinder();
 
 	/**
